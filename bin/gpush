@@ -13,6 +13,7 @@ else
    if [ $? -ne 0 ]; then 
       echo "repo $repo_name is not found"
    else
+      dir=$(find / -type d -name $repo_name)
       cd $dir 
       git pull
       git add .
