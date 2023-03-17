@@ -10,11 +10,6 @@ else
    echo "currently in: $PWD"
    read -p "What repo are you look for?: " repo_name
    dir=$(find / -type d -name $repo_name)
-   echo $dir
-   if [ $? -ne 0 ]; then 
-      echo "repo $repo_name is not found"
-   else
-      dir=$(find / -type d -name $repo_name)
       cd $dir 
       git pull
       git add .
