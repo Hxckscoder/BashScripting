@@ -6,6 +6,18 @@ if [ -d .git ]; then
     git commit -m "$1"
     git push -u origin main
 else
-  echo "error: not in git repository"
-  echo "currently in: $PWD"
-fi 
+   echo "error: not in git repository"
+   echo "currently in: $PWD"
+   read -p "What repo are you look for?: " repo_name
+   dir=$(find / -type d -name $repo_name)
+   if [ $? -ne 0 ]; then 
+      echo "repo $repo_name is not found"
+   else
+      cd $dir 
+      git pull
+      git add .
+      git commit -m "$1"
+      git push -u origin main
+   fi 
+fi
+

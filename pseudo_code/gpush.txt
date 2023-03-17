@@ -13,6 +13,9 @@ Psuedo coder:
      publish your code to github
     else 
      give error message about the current DIR
+     ask the user for the desured repo and save it as variable
+     usering the variable change dir to the desired repo
+     publish files to github 
     fi 
 
 
