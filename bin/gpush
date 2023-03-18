@@ -1,18 +1,55 @@
 #!/bin/bash
 
+# if [ -d .git ]; then
+#     git pull
+#     git add .
+#     git commit -m "$1"
+#     git push -u origin main
+# else
+#    echo "error: not in git repository"
+#    echo "currently in: $PWD"
+#    read -p "What repo are you look for?: " repo_name
+#    dir=$(find / -type d -name $repo_name)
+#       cd $dir 
+#       git pull
+#       git add .
+#       git commit -m "$1"
+#       git push -u origin main
+# fi 
+
 if [ -d .git ]; then
     git pull
     git add .
-    git commit -m "$1"
+    if [ -z "$1" ]; then
+        read -p "Enter commit message: " commit_message
+        git commit -m "$commit_message"
+    else
+        git commit -m "$1"
+    fi
     git push -u origin main
 else
-   echo "error: not in git repository"
-   echo "currently in: $PWD"
-   read -p "What repo are you look for?: " repo_name
-   dir=$(find / -type d -name $repo_name)
-      cd $dir 
-      git pull
-      git add .
-      git commit -m "$1"
-      git push -u origin main
-fi 
+   echo "Error: not in git repository"
+   echo "Currently in: $PWD"
+   read -p "What repository are you looking for?: " repo_name
+   dir=$(locate -r "/$repo_name/.git$" | head -1)
+   if [ -z "$dir" ]; then
+       echo "Error: repository not found"
+       exit 1
+   fi
+   if [[ $(echo "$dir" | wc -l) -gt 1 ]]; then
+       echo "Multiple directories found. Please choose one:"
+       echo "$dir" | nl
+       read -p "Enter number of directory: " choice
+       dir=$(echo "$dir" | sed -n "${choice}p")
+   fi
+   cd "$(dirname "$dir")"
+   git pull
+   git add .
+   if [ -z "$1" ]; then
+       read -p "Enter commit message: " commit_message
+       git commit -m "$commit_message"
+   else
+       git commit -m "$1"
+   fi
+   git push -u origin main
+fi

@@ -2,9 +2,12 @@
 
 if [ -z $1 ]; then 
   echo "Error: enter a repo name"
-
 else
-  dir=$(find / -type d -name $1)
-  cd $dir 
-  bash
-fi 
+  dir=$(find / -type d -name $1 2>/dev/null)
+  if [ -z "$dir" ]; then
+    echo "Error: $1 not found"
+  else
+    cd $dir
+    bash
+  fi
+fi
